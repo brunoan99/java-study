@@ -1,25 +1,26 @@
 package org.example.GettingToKnowTheLanguage;
 
+import org.example.Utils.Article;
+
 public class GettingToKnowTheLanguage {
   private static void title(String title) {
     System.out.printf(title + ": \n");
   }
 
   private static void line() {
-    System.out.printf("---------------------------------\n\n\n");
+    System.out.printf("---------------------------------\n\n");
+  }
+
+  private static void article(String title, Article article) {
+    title(title);
+    article.execute();
+    line();
   }
 
   public static void execute() {
-    title("Class");
-    Class.execute();
-    line();
+    article("Objects, Classes, Interfaces, Packages And Inheritance",
+        new ObjectsClassesInterfacesPackagesAndInheritance());
 
-    title("Inheritance");
-    Inheritance.execute();
-    line();
-
-    title("Interface");
-    Interface.execute();
-    line();
+    article("Java Language Basics", new JavaLanguageBasics());
   }
 }
