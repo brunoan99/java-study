@@ -1,6 +1,7 @@
 package org.example.GettingToKnowTheLanguage;
 
 import org.example.GettingToKnowTheLanguage.JavaLanguageBasics.JavaLanguageBasics;
+import org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance.ObjectsClassesInterfacesPackagesAndInheritance;
 import org.example.Utils.Article;
 
 public class GettingToKnowTheLanguage {

@@ -1,4 +1,4 @@
-package org.example.GettingToKnowTheLanguage;
+package org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance;
 
 import org.example.Utils.Article;
 
