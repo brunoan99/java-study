@@ -1,4 +1,4 @@
-package org.example.GettingToKnowTheLanguage;
+package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
 import org.example.Utils.Article;
 
