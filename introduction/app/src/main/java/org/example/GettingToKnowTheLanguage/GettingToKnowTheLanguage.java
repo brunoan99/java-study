@@ -1,5 +1,6 @@
 package org.example.GettingToKnowTheLanguage;
 
+import org.example.GettingToKnowTheLanguage.ClassesAndObjects.ClassesAndObjects;
 import org.example.GettingToKnowTheLanguage.JavaLanguageBasics.JavaLanguageBasics;
 import org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance.ObjectsClassesInterfacesPackagesAndInheritance;
 import org.example.Utils.Article;
@@ -24,5 +25,7 @@ public class GettingToKnowTheLanguage {
         new ObjectsClassesInterfacesPackagesAndInheritance());
 
     article("Java Language Basics", new JavaLanguageBasics());
+
+    article("Classes and Objects", new ClassesAndObjects());
   }
 }
