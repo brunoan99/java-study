@@ -1,8 +1,8 @@
 package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class CreatingPrimitiveTypeVariablesInYourPrograms implements Article {
+public class CreatingPrimitiveTypeVariablesInYourPrograms implements SubArticle {
   public void execute() {
     System.out.printf("Primitive Types:\n" +
         "  - byte: 8bit -> -128 to 127\n" +

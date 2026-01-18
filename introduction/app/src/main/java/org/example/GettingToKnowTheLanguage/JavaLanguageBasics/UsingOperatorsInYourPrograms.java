@@ -1,8 +1,8 @@
 package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class UsingOperatorsInYourPrograms implements Article {
+public class UsingOperatorsInYourPrograms implements SubArticle {
   public void execute() {
     System.out.println("Operators:\n" +
         "  - postfix: expr++ expr--\n" +

@@ -1,8 +1,8 @@
 package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class BranchingWithSwitchStatementsAndExpressions implements Article {
+public class BranchingWithSwitchStatementsAndExpressions implements SubArticle {
   enum Day {
     MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
   }

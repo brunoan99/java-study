@@ -1,34 +1,20 @@
 package org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance;
 
 import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
 public class ObjectsClassesInterfacesPackagesAndInheritance implements Article {
-  private static void title(String title) {
-    System.out.printf(title + ": \n");
-  }
-
-  private static void line() {
-    System.out.printf("- - - - - - - - - - - - - - - - -\n\n\n");
-  }
-
   public void execute() {
-    title("Class");
-    Class.execute();
-    line();
+    Article.display("Class", new Class());
 
-    title("Inheritance");
-    Inheritance.execute();
-    line();
+    Article.display("Inheritance", new Inheritance());
 
-    title("Interface");
-    Interface.execute();
-    line();
+    Article.display("Interface", new Interface());
   }
-
 }
 
-class Class {
-  public static void execute() {
+class Class implements SubArticle {
+  public void execute() {
     Bicycle bike1 = new Bicycle();
     Bicycle bike2 = new Bicycle();
 
@@ -77,8 +63,8 @@ class Bicycle {
   }
 }
 
-class Inheritance {
-  public static void execute() {
+class Inheritance implements SubArticle {
+  public void execute() {
   }
 }
 
@@ -86,8 +72,8 @@ class MountainBike extends Bicycle {
 
 }
 
-class Interface {
-  public static void execute() {
+class Interface implements SubArticle {
+  public void execute() {
     ACMEBicycle bike1 = new ACMEBicycle();
 
     bike1.changeCadence(50);

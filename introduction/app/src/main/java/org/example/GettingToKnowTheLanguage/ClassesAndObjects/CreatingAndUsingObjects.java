@@ -1,29 +1,15 @@
 package org.example.GettingToKnowTheLanguage.ClassesAndObjects;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class CreatingAndUsingObjects implements Article {
-  private static void title(String title) {
-    System.out.printf(title + ": \n");
-  }
-
-  private static void line() {
-    System.out.printf("-  -  -  -  -  -  -  -  -  -  -  \n\n");
-  }
-
-  private static void article(String title, Article article) {
-    title(title);
-    article.execute();
-    line();
-  }
-
+public class CreatingAndUsingObjects implements SubArticle {
   public void execute() {
-    article("Create Object", new CreateObjectDemo());
+    SubArticle.display("Create Object", new CreateObjectDemo());
 
-    article("Create Student", new CreateStudentDemo());
+    SubArticle.display("Create Student", new CreateStudentDemo());
   }
 
-  class CreateObjectDemo implements Article {
+  class CreateObjectDemo implements SubArticle {
     public void execute() {
       Point originOne = new Point(23, 94);
       Rectangle rectOne = new Rectangle(originOne, 100, 200);
@@ -44,7 +30,7 @@ public class CreatingAndUsingObjects implements Article {
     }
   }
 
-  class CreateStudentDemo implements Article {
+  class CreateStudentDemo implements SubArticle {
     public void execute() {
       Student student1 = new Student(); // Default constructor
       Student student2 = new Student("Alice"); // Name only

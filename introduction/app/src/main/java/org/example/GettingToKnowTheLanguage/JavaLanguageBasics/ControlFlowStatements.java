@@ -1,46 +1,32 @@
 package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class ControlFlowStatements implements Article {
-  private static void title(String title) {
-    System.out.printf(title + ": \n");
-  }
-
-  private static void line() {
-    System.out.printf("-  -  -  -  -  -  -  -  -  -  -  \n\n");
-  }
-
-  private static void article(String title, Article article) {
-    title(title);
-    article.execute();
-    line();
-  }
-
+public class ControlFlowStatements implements SubArticle {
   public void execute() {
-    article("If Else Statements", new IfElseDemo());
+    SubArticle.display("If Else Statements", new IfElseDemo());
 
-    article("While Statements", new WhileDemo());
+    SubArticle.display("While Statements", new WhileDemo());
 
-    article("Do While Statements", new DoWhileDemo());
+    SubArticle.display("Do While Statements", new DoWhileDemo());
 
-    article("For Statements", new ForDemo());
+    SubArticle.display("For Statements", new ForDemo());
 
-    article("Enhanced For Statements", new EnhancedForDemo());
+    SubArticle.display("Enhanced For Statements", new EnhancedForDemo());
 
-    article("Break Statements", new BreakDemo());
+    SubArticle.display("Break Statements", new BreakDemo());
 
-    article("Break With Label Statements", new BreakWithLabelDemo());
+    SubArticle.display("Break With Label Statements", new BreakWithLabelDemo());
 
-    article("Continue Statements", new ContinueDemo());
+    SubArticle.display("Continue Statements", new ContinueDemo());
 
-    article("Continue With Label Statements", new ContinueWithLabelDemo());
+    SubArticle.display("Continue With Label Statements", new ContinueWithLabelDemo());
 
-    article("Yield Statements", new YieldDemo());
+    SubArticle.display("Yield Statements", new YieldDemo());
   }
 }
 
-class IfElseDemo implements Article {
+class IfElseDemo implements SubArticle {
   public void execute() {
     int testscore = 76;
     char grade;
@@ -60,7 +46,7 @@ class IfElseDemo implements Article {
   }
 }
 
-class WhileDemo implements Article {
+class WhileDemo implements SubArticle {
   public void execute() {
     int count = 1;
     while (count < 11) {
@@ -70,7 +56,7 @@ class WhileDemo implements Article {
   }
 }
 
-class DoWhileDemo implements Article {
+class DoWhileDemo implements SubArticle {
   public void execute() {
     int count = 1;
     do {
@@ -80,7 +66,7 @@ class DoWhileDemo implements Article {
   }
 }
 
-class ForDemo implements Article {
+class ForDemo implements SubArticle {
   public void execute() {
     for (int i = 1; i < 11; i++) {
       System.out.println("Count is: " + i);
@@ -89,7 +75,7 @@ class ForDemo implements Article {
   }
 }
 
-class EnhancedForDemo implements Article {
+class EnhancedForDemo implements SubArticle {
   public void execute() {
     int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     for (int item : numbers) {
@@ -98,7 +84,7 @@ class EnhancedForDemo implements Article {
   }
 }
 
-class BreakDemo implements Article {
+class BreakDemo implements SubArticle {
   public void execute() {
 
     int[] arrayOfInts = { 32, 87, 3, 589,
@@ -124,7 +110,7 @@ class BreakDemo implements Article {
   }
 }
 
-class BreakWithLabelDemo implements Article {
+class BreakWithLabelDemo implements SubArticle {
   public void execute() {
 
     int[][] arrayOfInts = {
@@ -155,7 +141,7 @@ class BreakWithLabelDemo implements Article {
   }
 }
 
-class ContinueDemo implements Article {
+class ContinueDemo implements SubArticle {
   public void execute() {
 
     String searchMe = "peter piper picked a " + "peck of pickled peppers";
@@ -174,7 +160,7 @@ class ContinueDemo implements Article {
   }
 }
 
-class ContinueWithLabelDemo implements Article {
+class ContinueWithLabelDemo implements SubArticle {
   public void execute() {
 
     String searchMe = "Look for a substring in me";
@@ -200,7 +186,7 @@ class ContinueWithLabelDemo implements Article {
   }
 }
 
-class YieldDemo implements Article {
+class YieldDemo implements SubArticle {
   enum Day {
     MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
   }

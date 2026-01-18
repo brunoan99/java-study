@@ -2,9 +2,9 @@ package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
 import java.util.List;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class UsingTheVarTypeIdentifier implements Article {
+public class UsingTheVarTypeIdentifier implements SubArticle {
   public void execute() {
     var list = List.of("one", "two", "three", "four");
     for (var element : list) {

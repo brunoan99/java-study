@@ -1,8 +1,8 @@
 package org.example.GettingToKnowTheLanguage.ClassesAndObjects;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class CreatingClasses implements Article {
+public class CreatingClasses implements SubArticle {
   public void execute() {
   }
 }

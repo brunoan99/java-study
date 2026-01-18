@@ -1,8 +1,8 @@
 package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class CreatingVariablesAndNamingThem implements Article {
+public class CreatingVariablesAndNamingThem implements SubArticle {
   public void execute() {
     System.out.printf(
         "Kinds of variables:\n" +

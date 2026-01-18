@@ -1,34 +1,21 @@
 package org.example.GettingToKnowTheLanguage.JavaLanguageBasics;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class CreatingArraysInYourPrograms implements Article {
-  private static void title(String title) {
-    System.out.printf(title + ": \n");
-  }
-
-  private static void line() {
-    System.out.printf("-  -  -  -  -  -  -  -  -  -  -  \n\n");
-  }
-
-  private static void article(String title, Article article) {
-    title(title);
-    article.execute();
-    line();
-  }
+public class CreatingArraysInYourPrograms implements SubArticle {
 
   public void execute() {
-    article("Array Demo", new ArrayDemo());
+    SubArticle.display("Array Demo", new ArrayDemo());
 
-    article("Multi Dim Array Demo", new MultiDimArrayDemo());
+    SubArticle.display("Multi Dim Array Demo", new MultiDimArrayDemo());
 
-    article("Using the Length of an Array", new UsingLengthDemo());
+    SubArticle.display("Using the Length of an Array", new UsingLengthDemo());
 
-    article("Copying Arrays", new ArrayCopyDemo());
+    SubArticle.display("Copying Arrays", new ArrayCopyDemo());
   }
 }
 
-class ArrayDemo implements Article {
+class ArrayDemo implements SubArticle {
   public void execute() {
     // int[] anArray;
     // anArray = new int[10];
@@ -74,7 +61,7 @@ class ArrayDemo implements Article {
   }
 }
 
-class MultiDimArrayDemo implements Article {
+class MultiDimArrayDemo implements SubArticle {
   public void execute() {
     String[][] names = {
         { "Mr.", "Mrs.", "Ms." },
@@ -85,7 +72,7 @@ class MultiDimArrayDemo implements Article {
   }
 }
 
-class UsingLengthDemo implements Article {
+class UsingLengthDemo implements SubArticle {
   public void execute() {
     String[][] strings = {
         { "one" },
@@ -103,7 +90,7 @@ class UsingLengthDemo implements Article {
   }
 }
 
-class ArrayCopyDemo implements Article {
+class ArrayCopyDemo implements SubArticle {
   public void execute() {
     String[] copyFrom = {
         "Affogato", "Americano", "Cappuccino", "Corretto", "Cortado",

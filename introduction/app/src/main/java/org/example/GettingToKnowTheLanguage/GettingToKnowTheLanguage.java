@@ -4,31 +4,17 @@ import org.example.GettingToKnowTheLanguage.ClassesAndObjects.ClassesAndObjects;
 import org.example.GettingToKnowTheLanguage.JavaLanguageBasics.JavaLanguageBasics;
 import org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance.ObjectsClassesInterfacesPackagesAndInheritance;
 import org.example.GettingToKnowTheLanguage.UsingRecordsToModelImmutableData.UsingRecordsToModelImmutableData;
-import org.example.Utils.Article;
+import org.example.Utils.Module;
 
-public class GettingToKnowTheLanguage {
-  private static void title(String title) {
-    System.out.printf(title + ": \n");
-  }
-
-  private static void line() {
-    System.out.printf("---------------------------------\n\n");
-  }
-
-  private static void article(String title, Article article) {
-    title(title);
-    article.execute();
-    line();
-  }
-
-  public static void execute() {
-    article("Objects, Classes, Interfaces, Packages And Inheritance",
+public class GettingToKnowTheLanguage implements Module {
+  public void execute() {
+    Module.display("Objects, Classes, Interfaces, Packages And Inheritance",
         new ObjectsClassesInterfacesPackagesAndInheritance());
 
-    article("Java Language Basics", new JavaLanguageBasics());
+    Module.display("Java Language Basics", new JavaLanguageBasics());
 
-    article("Classes and Objects", new ClassesAndObjects());
+    Module.display("Classes and Objects", new ClassesAndObjects());
 
-    article("Using Records to Model Immutable Data", new UsingRecordsToModelImmutableData());
+    Module.display("Using Records to Model Immutable Data", new UsingRecordsToModelImmutableData());
   }
 }

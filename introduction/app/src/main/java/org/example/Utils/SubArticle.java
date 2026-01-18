@@ -1,9 +1,9 @@
 package org.example.Utils;
 
-public interface Article {
+public interface SubArticle {
   public void execute();
 
-  final String lineFormatString = "- - - - - - - - - - -\n";
+  final String lineFormatString = "-  -  -  -  -  -  -  ";
 
   private static void line() {
     System.out.println(lineFormatString);

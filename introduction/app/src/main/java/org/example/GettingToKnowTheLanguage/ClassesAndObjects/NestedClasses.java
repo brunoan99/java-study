@@ -1,37 +1,23 @@
 package org.example.GettingToKnowTheLanguage.ClassesAndObjects;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class NestedClasses implements Article {
-  private static void title(String title) {
-    System.out.printf(title + ": \n");
-  }
-
-  private static void line() {
-    System.out.printf("-  -  -  -  -  -  -  -  -  -  -  \n\n");
-  }
-
-  private static void article(String title, Article article) {
-    title(title);
-    article.execute();
-    line();
-  }
-
+public class NestedClasses implements SubArticle {
   public void execute() {
-    article("Nested Classes", new OuterClass());
+    SubArticle.display("Nested Classes", new OuterClass());
 
-    article("Shadowing", new ShadowTest());
+    SubArticle.display("Shadowing", new ShadowTest());
 
-    article("DataStructure Example Using Inner Class", new DataStructure());
+    SubArticle.display("DataStructure Example Using Inner Class", new DataStructure());
 
-    article("Declaring Local Classes", new LocalClassExample());
+    SubArticle.display("Declaring Local Classes", new LocalClassExample());
 
-    article("Anonymous Classes", new HelloWorldAnonymousClasses());
+    SubArticle.display("Anonymous Classes", new HelloWorldAnonymousClasses());
   }
 
 }
 
-class OuterClass implements Article {
+class OuterClass implements SubArticle {
 
   String outerField = "Outer field";
   static String staticOuterField = "Static outer field";
@@ -83,7 +69,7 @@ class TopLevelClass {
   }
 }
 
-class ShadowTest implements Article {
+class ShadowTest implements SubArticle {
 
   public int x = 0;
 
@@ -105,7 +91,7 @@ class ShadowTest implements Article {
   }
 }
 
-class DataStructure implements Article {
+class DataStructure implements SubArticle {
 
   // Create an array
   private final static int SIZE = 15;
@@ -165,7 +151,7 @@ class DataStructure implements Article {
   }
 }
 
-class LocalClassExample implements Article {
+class LocalClassExample implements SubArticle {
   static String regularExpression = "[^0-9]";
 
   public static void validatePhoneNumber(
@@ -211,7 +197,7 @@ class LocalClassExample implements Article {
   }
 }
 
-class HelloWorldAnonymousClasses implements Article {
+class HelloWorldAnonymousClasses implements SubArticle {
   interface HelloWorld {
     public void greet();
 

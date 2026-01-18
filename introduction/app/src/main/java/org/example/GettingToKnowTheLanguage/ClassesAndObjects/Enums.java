@@ -1,8 +1,8 @@
 package org.example.GettingToKnowTheLanguage.ClassesAndObjects;
 
-import org.example.Utils.Article;
+import org.example.Utils.SubArticle;
 
-public class Enums implements Article {
+public class Enums implements SubArticle {
   public void execute() {
     new EnumsDemo().execute();
   }
@@ -23,7 +23,7 @@ enum DayOfWeek {
   }
 }
 
-class EnumsDemo implements Article {
+class EnumsDemo implements SubArticle {
   public void execute() {
     DayOfWeek weekStart = DayOfWeek.MONDAY;
 

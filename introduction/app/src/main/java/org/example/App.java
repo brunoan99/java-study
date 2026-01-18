@@ -4,6 +4,6 @@ import org.example.GettingToKnowTheLanguage.GettingToKnowTheLanguage;
 
 public class App {
   public static void main(String[] args) {
-    GettingToKnowTheLanguage.execute();
+    new GettingToKnowTheLanguage().execute();
   }
 }
