@@ -6,6 +6,8 @@ import org.example.GettingToKnowTheLanguage.NumbersAndStrings.NumbersAndStrings;
 import org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance.ObjectsClassesInterfacesPackagesAndInheritance;
 import org.example.GettingToKnowTheLanguage.UsingRecordsToModelImmutableData.UsingRecordsToModelImmutableData;
 import org.example.GettingToKnowTheLanguage.Inheritance.Inheritance;
+import org.example.GettingToKnowTheLanguage.Interfaces.Interfaces;
+
 import org.example.Utils.Module;
 
 public class GettingToKnowTheLanguage implements Module {
@@ -22,5 +24,7 @@ public class GettingToKnowTheLanguage implements Module {
     Module.display("Numbers and Strings", new NumbersAndStrings());
 
     Module.display("Inheritance", new Inheritance());
+
+    Module.display("Interfaces", new Interfaces());
   }
 }
