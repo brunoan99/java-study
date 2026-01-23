@@ -7,6 +7,7 @@ import org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndI
 import org.example.GettingToKnowTheLanguage.UsingRecordsToModelImmutableData.UsingRecordsToModelImmutableData;
 import org.example.GettingToKnowTheLanguage.Inheritance.Inheritance;
 import org.example.GettingToKnowTheLanguage.Interfaces.Interfaces;
+import org.example.GettingToKnowTheLanguage.Generics.Generics;
 
 import org.example.Utils.Module;
 
@@ -26,5 +27,7 @@ public class GettingToKnowTheLanguage implements Module {
     Module.display("Inheritance", new Inheritance());
 
     Module.display("Interfaces", new Interfaces());
+
+    Module.display("Generics", new Generics());
   }
 }
