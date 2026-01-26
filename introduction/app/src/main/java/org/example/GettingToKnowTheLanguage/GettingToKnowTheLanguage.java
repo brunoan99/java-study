@@ -3,6 +3,7 @@ package org.example.GettingToKnowTheLanguage;
 import org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance.ObjectsClassesInterfacesPackagesAndInheritance;
 import org.example.GettingToKnowTheLanguage.JavaLanguageBasics.JavaLanguageBasics;
 import org.example.GettingToKnowTheLanguage.ClassesAndObjects.ClassesAndObjects;
+import org.example.GettingToKnowTheLanguage.Exceptions.ExceptionsArticle;
 import org.example.GettingToKnowTheLanguage.UsingRecordsToModelImmutableData.UsingRecordsToModelImmutableData;
 import org.example.GettingToKnowTheLanguage.NumbersAndStrings.NumbersAndStrings;
 import org.example.GettingToKnowTheLanguage.Inheritance.Inheritance;
@@ -40,5 +41,7 @@ public class GettingToKnowTheLanguage implements Module {
     Module.display("Packages", new Packages());
 
     Module.display("Using Pattern Matching", new UsingPatternMatching());
+
+    Module.display("Exceptions", new ExceptionsArticle());
   }
 }
