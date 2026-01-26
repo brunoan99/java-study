@@ -11,7 +11,7 @@ import org.example.GettingToKnowTheLanguage.Generics.Generics;
 import org.example.GettingToKnowTheLanguage.LambdaExpressions.LambdaExpressions;
 import org.example.GettingToKnowTheLanguage.Annotations.Annotations;
 import org.example.GettingToKnowTheLanguage.Packages.Packages;
-
+import org.example.GettingToKnowTheLanguage.UsingPatternMatching.UsingPatternMatching;
 import org.example.Utils.Module;
 
 public class GettingToKnowTheLanguage implements Module {
@@ -38,5 +38,7 @@ public class GettingToKnowTheLanguage implements Module {
     Module.display("Annotations", new Annotations());
 
     Module.display("Packages", new Packages());
+
+    Module.display("Using Pattern Matching", new UsingPatternMatching());
   }
 }
