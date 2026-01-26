@@ -10,6 +10,7 @@ import org.example.GettingToKnowTheLanguage.Interfaces.Interfaces;
 import org.example.GettingToKnowTheLanguage.Generics.Generics;
 import org.example.GettingToKnowTheLanguage.LambdaExpressions.LambdaExpressions;
 import org.example.GettingToKnowTheLanguage.Annotations.Annotations;
+import org.example.GettingToKnowTheLanguage.Packages.Packages;
 
 import org.example.Utils.Module;
 
@@ -35,5 +36,7 @@ public class GettingToKnowTheLanguage implements Module {
     Module.display("Lambda Expressions", new LambdaExpressions());
 
     Module.display("Annotations", new Annotations());
+
+    Module.display("Packages", new Packages());
   }
 }
