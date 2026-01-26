@@ -1,13 +1,14 @@
 package org.example.GettingToKnowTheLanguage;
 
-import org.example.GettingToKnowTheLanguage.ClassesAndObjects.ClassesAndObjects;
-import org.example.GettingToKnowTheLanguage.JavaLanguageBasics.JavaLanguageBasics;
-import org.example.GettingToKnowTheLanguage.NumbersAndStrings.NumbersAndStrings;
 import org.example.GettingToKnowTheLanguage.ObjectsClassesInterfacesPackagesAndInheritance.ObjectsClassesInterfacesPackagesAndInheritance;
+import org.example.GettingToKnowTheLanguage.JavaLanguageBasics.JavaLanguageBasics;
+import org.example.GettingToKnowTheLanguage.ClassesAndObjects.ClassesAndObjects;
 import org.example.GettingToKnowTheLanguage.UsingRecordsToModelImmutableData.UsingRecordsToModelImmutableData;
+import org.example.GettingToKnowTheLanguage.NumbersAndStrings.NumbersAndStrings;
 import org.example.GettingToKnowTheLanguage.Inheritance.Inheritance;
 import org.example.GettingToKnowTheLanguage.Interfaces.Interfaces;
 import org.example.GettingToKnowTheLanguage.Generics.Generics;
+import org.example.GettingToKnowTheLanguage.LambdaExpressions.LambdaExpressions;
 
 import org.example.Utils.Module;
 
@@ -29,5 +30,7 @@ public class GettingToKnowTheLanguage implements Module {
     Module.display("Interfaces", new Interfaces());
 
     Module.display("Generics", new Generics());
+
+    Module.display("Lambda Expressions", new LambdaExpressions());
   }
 }
