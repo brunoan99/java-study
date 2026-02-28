@@ -11,8 +11,7 @@
 	<groupId>dev.brunoan</groupId>
 	<artifactId>rest-with-spring-boot-and-java</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>rest-with-spring-boot-and-java</name>
 	<url/>
 	<licenses>
 		<license/>
