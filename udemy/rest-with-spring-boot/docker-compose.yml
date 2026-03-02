@@ -1,0 +1,32 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql_db
+    restart: unless-stopped
+
+    # Override default env vars here or use a .env file
+    environment:
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+
+    ports:
+      - "3306:3306"
+
+    # Named volume ensures data persists across container stop/start/remove
+    volumes:
+      - /tmp/mysql_data:/var/lib/mysql
+
+    # Health check so dependent services wait until MySQL is ready
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "myuser", "-pmypassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+# Named volume managed by Docker — survives container restarts and removals
+volumes:
+  mysql_data:
+    driver: local
