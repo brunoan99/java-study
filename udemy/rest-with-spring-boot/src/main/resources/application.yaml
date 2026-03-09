@@ -12,5 +12,5 @@ spring:
     open-in-view: false
 logging:
   level:
-    dev.brunoan.rest_with_spring_boot_and_java: DEBUG
+    dev.brunoan.restwithspringbootandjava: DEBUG
 

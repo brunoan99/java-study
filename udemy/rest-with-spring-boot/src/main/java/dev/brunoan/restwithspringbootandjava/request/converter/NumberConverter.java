@@ -1,6 +1,6 @@
-package dev.brunoan.rest_with_spring_boot_and_java.request.converter;
+package dev.brunoan.restwithspringbootandjava.request.converter;
 
-import dev.brunoan.rest_with_spring_boot_and_java.exception.UnsupportedMathOperationException;
+import dev.brunoan.restwithspringbootandjava.exception.UnsupportedMathOperationException;
 
 public class NumberConverter {
   public static double convertToDouble(String strNumber) throws Exception {

@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.exception;
+package dev.brunoan.restwithspringbootandjava.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

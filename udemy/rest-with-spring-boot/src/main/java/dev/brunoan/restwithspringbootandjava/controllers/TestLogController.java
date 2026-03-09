@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.controllers;
+package dev.brunoan.restwithspringbootandjava.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

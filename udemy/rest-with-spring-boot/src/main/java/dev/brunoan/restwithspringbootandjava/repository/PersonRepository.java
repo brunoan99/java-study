@@ -1,6 +1,6 @@
-package dev.brunoan.rest_with_spring_boot_and_java.repository;
+package dev.brunoan.restwithspringbootandjava.repository;
 
-import dev.brunoan.rest_with_spring_boot_and_java.model.Person;
+import dev.brunoan.restwithspringbootandjava.model.Person;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

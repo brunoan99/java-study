@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.services;
+package dev.brunoan.restwithspringbootandjava.services;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.brunoan.rest_with_spring_boot_and_java.exception.ResourceNotFoundException;
-import dev.brunoan.rest_with_spring_boot_and_java.model.Person;
-import dev.brunoan.rest_with_spring_boot_and_java.repository.PersonRepository;
+import dev.brunoan.restwithspringbootandjava.exception.ResourceNotFoundException;
+import dev.brunoan.restwithspringbootandjava.model.Person;
+import dev.brunoan.restwithspringbootandjava.repository.PersonRepository;
 
 @Service
 public class PersonServices {

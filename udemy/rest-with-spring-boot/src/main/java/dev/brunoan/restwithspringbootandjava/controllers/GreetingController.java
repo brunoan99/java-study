@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.controllers;
+package dev.brunoan.restwithspringbootandjava.controllers;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.brunoan.rest_with_spring_boot_and_java.model.Greeting;
+import dev.brunoan.restwithspringbootandjava.model.Greeting;
 
 @RestController
 public class GreetingController {

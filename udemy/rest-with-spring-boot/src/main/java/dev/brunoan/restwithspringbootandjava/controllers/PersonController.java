@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.controllers;
+package dev.brunoan.restwithspringbootandjava.controllers;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.brunoan.rest_with_spring_boot_and_java.model.Person;
-import dev.brunoan.rest_with_spring_boot_and_java.services.PersonServices;
+import dev.brunoan.restwithspringbootandjava.model.Person;
+import dev.brunoan.restwithspringbootandjava.services.PersonServices;
 
 @RestController
 @RequestMapping("/person")

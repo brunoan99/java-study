@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.exception.handler;
+package dev.brunoan.restwithspringbootandjava.exception.handler;
 
 import java.util.Date;
 
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import dev.brunoan.rest_with_spring_boot_and_java.exception.ExceptionResponse;
-import dev.brunoan.rest_with_spring_boot_and_java.exception.ResourceNotFoundException;
-import dev.brunoan.rest_with_spring_boot_and_java.exception.UnsupportedMathOperationException;
+import dev.brunoan.restwithspringbootandjava.exception.ExceptionResponse;
+import dev.brunoan.restwithspringbootandjava.exception.ResourceNotFoundException;
+import dev.brunoan.restwithspringbootandjava.exception.UnsupportedMathOperationException;
 
 @RestController
 @ControllerAdvice

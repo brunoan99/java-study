@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.model;
+package dev.brunoan.restwithspringbootandjava.model;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,11 +1,11 @@
-package dev.brunoan.rest_with_spring_boot_and_java.controllers;
+package dev.brunoan.restwithspringbootandjava.controllers;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.brunoan.rest_with_spring_boot_and_java.math.SimpleMath;
-import dev.brunoan.rest_with_spring_boot_and_java.request.converter.NumberConverter;
+import dev.brunoan.restwithspringbootandjava.math.SimpleMath;
+import dev.brunoan.restwithspringbootandjava.request.converter.NumberConverter;
 
 @RestController
 @RequestMapping("/math")

@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java.math;
+package dev.brunoan.restwithspringbootandjava.math;
 
 public class SimpleMath {
 

@@ -1,4 +1,4 @@
-package dev.brunoan.rest_with_spring_boot_and_java;
+package dev.brunoan.restwithspringbootandjava;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
