@@ -8,7 +8,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
     show-sql: false
+    open-in-view: false
+logging:
+  level:
+    dev.brunoan.rest_with_spring_boot_and_java: DEBUG
+
