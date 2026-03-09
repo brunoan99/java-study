@@ -1,71 +1,59 @@
 package dev.brunoan.rest_with_spring_boot_and_java.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.brunoan.rest_with_spring_boot_and_java.exception.ResourceNotFoundException;
 import dev.brunoan.rest_with_spring_boot_and_java.model.Person;
+import dev.brunoan.rest_with_spring_boot_and_java.repository.PersonRepository;
 
 @Service
 public class PersonServices {
 
-  private final AtomicLong counter = new AtomicLong(0);
+  private Logger logger = LoggerFactory.getLogger(PersonServices.class.getName());
 
-  private Logger logger = Logger.getLogger(PersonServices.class.getName());
+  @Autowired
+  PersonRepository repository;
 
   public List<Person> findAll() {
     logger.info("Finding all people!");
 
-    ArrayList<Person> persons = new ArrayList<>();
-    for (int i = 0; i < 8; i++) {
-      Person person = new Person();
-      person.setId(counter.incrementAndGet());
-      person.setFirstName("Person Name " + i);
-      person.setLastName("Last Name " + i);
-      person.setAddress("Some address in Brasil " + i);
-      if (i % 2 == 0)
-        person.setGender("Male");
-      else
-        person.setGender("Female");
-      persons.add(person);
-    }
-    return persons;
+    return repository.findAll();
   }
 
-  public Person findById(String id) {
+  public Person findById(Long id) {
     logger.info("Finding one person!");
 
-    Person person = new Person();
-    person.setId(counter.incrementAndGet());
-    person.setFirstName("Jorge");
-    person.setLastName("Matias");
-    person.setAddress("São Paulo - SP - Brasil");
-    person.setGender("Male");
-    return person;
+    return repository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
   }
 
   public Person create(Person person) {
     logger.info("Creating one person!");
 
-    Person newPerson = new Person();
-    newPerson.setId(counter.incrementAndGet());
-    newPerson.setFirstName(person.getFirstName());
-    newPerson.setLastName(person.getLastName());
-    newPerson.setAddress(person.getAddress());
-    newPerson.setGender(person.getGender());
-    return newPerson;
+    return repository.save(person);
   }
 
   public Person update(Person person) {
     logger.info("Updating one person!");
+    Person entity = findById(person.getId());
 
-    return person;
+    entity.setFirstName(person.getFirstName());
+    entity.setLastName(person.getLastName());
+    entity.setAddress(person.getAddress());
+    entity.setGender(person.getGender());
+
+    return repository.save(entity);
   }
 
-  public void delete(String id) {
+  public void delete(Long id) {
     logger.info("Deleting one person!");
+    findById(id);
+    repository.deleteById(id);
   }
 }
