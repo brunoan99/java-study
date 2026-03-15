@@ -3,6 +3,11 @@ server:
 spring:
   application:
     name: greeting-service
+  config:
+    import: optional:configserver:http://localhost:8888/
+  cloud:
+    config:
+      profile: br
 management:
   endpoints:
     web:
@@ -11,6 +16,6 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
-greeting-service:
-  template: "Olá, %s!"
-  default-name: "Mundo"
+# greeting-service:
+#   greeting: "Olá, %s!"
+#   default-value: "Mundo"

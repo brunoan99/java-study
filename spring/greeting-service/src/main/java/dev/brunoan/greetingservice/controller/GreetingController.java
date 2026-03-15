@@ -17,7 +17,6 @@ public class GreetingController {
 
   private GreetingConfiguration configuration;
 
-  @Autowired
   public GreetingController(GreetingConfiguration configuration) {
     this.configuration = configuration;
   }
@@ -26,8 +25,8 @@ public class GreetingController {
   public Greeting greeting(
       @RequestParam(value = "name", defaultValue = "") String name) {
     if (name.isBlank())
-      name = configuration.defaultName();
+      name = configuration.getDefaultValue();
 
-    return new Greeting(counter.incrementAndGet(), String.format(configuration.template(), name));
+    return new Greeting(counter.incrementAndGet(), configuration.getGreeting() + ", " + name);
   }
 }
