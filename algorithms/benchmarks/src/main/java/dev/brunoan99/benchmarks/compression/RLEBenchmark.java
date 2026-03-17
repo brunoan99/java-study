@@ -1,6 +1,6 @@
 package dev.brunoan99.benchmarks.compression;
 
-import dev.brunoan99.algorithms.compression.RLECompressor;
+import dev.brunoan99.algorithms.compression.RLE;
 
 import dev.brunoan99.utilities.Table;
 
@@ -14,9 +14,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class RLECompressorBenchmark {
+public class RLEBenchmark {
 
-  private RLECompressorBenchmark() {
+  private RLEBenchmark() {
   }
 
   private record RandomTestConfig(int randomTestsNumber, int randomStringLength, int maxSequenceLength) {
@@ -44,12 +44,12 @@ public class RLECompressorBenchmark {
       String input = sb.toString();
 
       long compressingStartTime = System.nanoTime();
-      String compressed = RLECompressor.compress(input);
+      String compressed = RLE.compress(input);
       long compressingEndTime = System.nanoTime();
       long compressingTime = compressingEndTime - compressingStartTime;
 
       long decompressingStartTime = System.nanoTime();
-      String decompressed = RLECompressor.decompress(compressed);
+      String decompressed = RLE.decompress(compressed);
       long decompressingEndTime = System.nanoTime();
       long decompressingTime = decompressingEndTime - decompressingStartTime;
 

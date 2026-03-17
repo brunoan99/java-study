@@ -1,8 +1,8 @@
 package dev.brunoan99.algorithms.compression;
 
-public class RLECompressor {
+public class RLE {
 
-  private RLECompressor() {
+  private RLE() {
   }
 
   public static String compress(String input) {
