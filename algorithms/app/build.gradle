@@ -8,7 +8,9 @@ plugins {
 
 dependencies {
     implementation 'org.apache.commons:commons-text'
+    implementation project(':algorithms')
     implementation project(':utilities')
+    implementation project(':benchmarks')
 }
 
 application {

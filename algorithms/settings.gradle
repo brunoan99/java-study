@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'algorithms'
-include('app', 'list', 'utilities')
+include('app', 'algorithms', 'utilities', 'benchmarks')
