@@ -1,13 +1,13 @@
 package dev.brunoan99.benchmarks.compression;
 
 import dev.brunoan99.algorithms.compression.Huffman;
+import dev.brunoan99.utilities.Accumulator;
 import dev.brunoan99.utilities.BenchmarkRunner;
 import dev.brunoan99.utilities.RandomInputHelper;
-import dev.brunoan99.utilities.ResultAggregator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,7 +33,8 @@ public class HuffmanBenchmark {
       float meanDecodingTime) {
   }
 
-  public static class HuffmanBenchmarkAccumulator implements ResultAggregator.Accumulator<ResultLine, ResultFinal> {
+  public static class HuffmanBenchmarkAccumulator
+      implements Accumulator<HuffmanBenchmark.ResultLine, HuffmanBenchmark.ResultFinal> {
     int count = 0;
     float sumOriginalSize = 0L;
     float sumCompressedSize = 0L;
@@ -107,7 +108,7 @@ public class HuffmanBenchmark {
     }
   }
 
-  private static ArrayList<ArrayList<String>> formatFunction(HashMap<BenchmarkRunner.InputParam, ResultFinal> resMap) {
+  private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList(
@@ -139,7 +140,7 @@ public class HuffmanBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTestsByHelper(boolean logOnConsole, boolean saveFile) throws Exception {
+  public static void benchmarkRandomTests(boolean logOnConsole, boolean saveFile) throws Exception {
     BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
         32,
         512,
@@ -148,7 +149,7 @@ public class HuffmanBenchmark {
         1000);
 
     long timestamp = System.currentTimeMillis();
-    String folder = "../benchmarks/benchmarks_results/compression/rle/";
+    String folder = "../benchmarks/benchmarks_results/compression/huffman/";
     String path = folder + "rle_compressor_random_tests_results_" + timestamp + ".txt";
 
     BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
@@ -159,10 +160,9 @@ public class HuffmanBenchmark {
 
     BenchmarkRunner benchRunner = new BenchmarkRunner(config);
 
-    Supplier<ResultAggregator.Accumulator<ResultLine, ResultFinal>> accumulatorFactory = () -> new HuffmanBenchmarkAccumulator();
-    Function<RandomInputHelper.InputLine, ResultLine> processFunction = inputLine -> processFunction(inputLine);
-    Function<HashMap<BenchmarkRunner.InputParam, ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = resMap -> formatFunction(
-        resMap);
+    Supplier<Accumulator<ResultLine, ResultFinal>> accumulatorFactory = HuffmanBenchmarkAccumulator::new;
+    Function<RandomInputHelper.InputLine, ResultLine> processFunction = HuffmanBenchmark::processFunction;
+    Function<Map<BenchmarkRunner.InputParam, ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = HuffmanBenchmark::formatFunction;
 
     benchRunner.benchmarkRandomTest(
         accumulatorFactory,

@@ -1,19 +1,19 @@
 package dev.brunoan99.benchmarks.compression;
 
-import dev.brunoan99.algorithms.compression.RLE;
+import dev.brunoan99.algorithms.compression.LZ77;
 import dev.brunoan99.utilities.Accumulator;
 import dev.brunoan99.utilities.BenchmarkRunner;
 import dev.brunoan99.utilities.RandomInputHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class RLEBenchmark {
-
-  private RLEBenchmark() {
+public class LZ77Benchmark {
+  private LZ77Benchmark() {
   }
 
   record ResultLine(
@@ -32,8 +32,8 @@ public class RLEBenchmark {
       float meanDecompressingTime) {
   }
 
-  public static class RLEBenchmarkAccumulator
-      implements Accumulator<RLEBenchmark.ResultLine, RLEBenchmark.ResultFinal> {
+  public static class LZ77BenchmarkAccumulator
+      implements Accumulator<LZ77Benchmark.ResultLine, LZ77Benchmark.ResultFinal> {
     int count = 0;
     long sumOriginalSize = 0L;
     long sumCompressedSize = 0L;
@@ -67,12 +67,14 @@ public class RLEBenchmark {
     String text = inputLine.value();
 
     long compressingStartTime = System.nanoTime();
-    String compressed = RLE.compress(text);
+    List<LZ77.Token> tokens = LZ77.compress(text);
+    String compressed = LZ77.stringifyListOfTokens(tokens);
     long compressingEndTime = System.nanoTime();
     long compressingTime = compressingEndTime - compressingStartTime;
 
     long decompressingStartTime = System.nanoTime();
-    String decompressed = RLE.decompress(compressed);
+    List<LZ77.Token> tokensFromString = LZ77.listOfTokensFromString(compressed);
+    String decompressed = LZ77.decompress(tokensFromString);
     long decompressingEndTime = System.nanoTime();
     long decompressingTime = decompressingEndTime - decompressingStartTime;
 
@@ -112,17 +114,17 @@ public class RLEBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTest(boolean logOnConsole, boolean saveFile)
+  public static void benchmarkRandomTests(boolean logOnConsole, boolean saveFile)
       throws Exception {
     BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
         64,
         2_097_152,
         1,
         32,
-        1000);
+        100);
 
     long timestamp = System.currentTimeMillis();
-    String folder = "../benchmarks/benchmarks_results/compression/rle/";
+    String folder = "../benchmarks/benchmarks_results/compression/lz77/";
     String path = folder + "rle_compressor_random_tests_results_" + timestamp + ".txt";
 
     BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
@@ -132,13 +134,14 @@ public class RLEBenchmark {
         path);
     BenchmarkRunner benchRunner = new BenchmarkRunner(config);
 
-    Supplier<Accumulator<ResultLine, ResultFinal>> accumulatorFactory = RLEBenchmarkAccumulator::new;
-    Function<RandomInputHelper.InputLine, ResultLine> processFunction = RLEBenchmark::processFunction;
-    Function<Map<BenchmarkRunner.InputParam, ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = RLEBenchmark::formatFunction;
+    Supplier<Accumulator<LZ77Benchmark.ResultLine, LZ77Benchmark.ResultFinal>> accumulatorFactory = LZ77BenchmarkAccumulator::new;
+    Function<RandomInputHelper.InputLine, LZ77Benchmark.ResultLine> processFunction = LZ77Benchmark::processFunction;
+    Function<Map<BenchmarkRunner.InputParam, LZ77Benchmark.ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = LZ77Benchmark::formatFunction;
 
     benchRunner.benchmarkRandomTest(
         accumulatorFactory,
         processFunction,
         formatFunction);
   }
+
 }

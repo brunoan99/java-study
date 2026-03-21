@@ -1,8 +1,10 @@
 package dev.brunoan99.utilities;
 
+import dev.brunoan99.utilities.RandomInputHelper.InputLine;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -83,10 +85,10 @@ public class BenchmarkRunner {
   }
 
   public <TestResult, BenchmarkResult> void benchmarkRandomTest(
-      Supplier<ResultAggregator.Accumulator<TestResult, BenchmarkResult>> accumulatorFactory,
-      Function<RandomInputHelper.InputLine, TestResult> processFunction,
-      Function<HashMap<InputParam, BenchmarkResult>, ArrayList<ArrayList<String>>> formatFunction) throws Exception {
-    ResultAggregator<InputParam, TestResult, BenchmarkResult> resAg = new ResultAggregator<>(accumulatorFactory);
+      Supplier<Accumulator<TestResult, BenchmarkResult>> accumulatorFactory,
+      Function<InputLine, TestResult> processFunction,
+      Function<Map<InputParam, BenchmarkResult>, ArrayList<ArrayList<String>>> formatFunction) throws Exception {
+    ResultAggregator<InputParam, BenchmarkResult> resultAggregator = new ResultAggregator<>();
     ArrayList<InputParam> allParams = new ArrayList<>();
 
     for (int rsl = config.benchConfig.maxRandomStringLength(); rsl > config.benchConfig
@@ -105,14 +107,17 @@ public class BenchmarkRunner {
     for (InputParam inputParam : allParams) {
       futures.add(executor.submit(() -> {
         Random localRandom = new Random();
+        Accumulator<TestResult, BenchmarkResult> benchmarkAccumulator = accumulatorFactory.get();
         for (int i = 0; i < config.benchConfig.testNumber(); i++) {
           RandomInputHelper.InputLine input = RandomInputHelper.generateLine(
               inputParam.randomStringLength(),
               inputParam.maxSequenceLength(),
               localRandom);
           TestResult testResult = processFunction.apply(input);
-          resAg.add(inputParam, testResult);
+          benchmarkAccumulator.add(testResult);
         }
+        BenchmarkResult benchmarkResult = benchmarkAccumulator.result();
+        resultAggregator.add(inputParam, benchmarkResult);
       }));
     }
 
@@ -122,7 +127,7 @@ public class BenchmarkRunner {
 
     executor.shutdown();
 
-    HashMap<InputParam, BenchmarkResult> resMap = resAg.compute();
+    Map<InputParam, BenchmarkResult> resMap = resultAggregator.getMap();
 
     ArrayList<ArrayList<String>> table = formatFunction.apply(resMap);
 
