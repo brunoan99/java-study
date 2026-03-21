@@ -150,7 +150,7 @@ public class HuffmanBenchmark {
 
     long timestamp = System.currentTimeMillis();
     String folder = "../benchmarks/benchmarks_results/compression/huffman/";
-    String path = folder + "rle_compressor_random_tests_results_" + timestamp + ".txt";
+    String path = folder + "huffman_compressor_random_tests_results_" + timestamp + ".txt";
 
     BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
         benchConfig,
