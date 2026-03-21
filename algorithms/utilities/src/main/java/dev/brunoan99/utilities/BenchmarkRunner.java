@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -88,7 +89,7 @@ public class BenchmarkRunner {
       Supplier<Accumulator<TestResult, BenchmarkResult>> accumulatorFactory,
       Function<InputLine, TestResult> processFunction,
       Function<Map<InputParam, BenchmarkResult>, ArrayList<ArrayList<String>>> formatFunction) throws Exception {
-    ResultAggregator<InputParam, BenchmarkResult> resultAggregator = new ResultAggregator<>();
+    ConcurrentHashMap<InputParam, BenchmarkResult> resultAggregator = new ConcurrentHashMap<>();
     ArrayList<InputParam> allParams = new ArrayList<>();
 
     for (int rsl = config.benchConfig.maxRandomStringLength(); rsl > config.benchConfig
@@ -117,20 +118,15 @@ public class BenchmarkRunner {
           benchmarkAccumulator.add(testResult);
         }
         BenchmarkResult benchmarkResult = benchmarkAccumulator.result();
-        resultAggregator.add(inputParam, benchmarkResult);
+        resultAggregator.putIfAbsent(inputParam, benchmarkResult);
       }));
     }
-
     for (Future<?> f : futures) {
       f.get();
     }
-
     executor.shutdown();
 
-    Map<InputParam, BenchmarkResult> resMap = resultAggregator.getMap();
-
-    ArrayList<ArrayList<String>> table = formatFunction.apply(resMap);
-
+    ArrayList<ArrayList<String>> table = formatFunction.apply(resultAggregator);
     logAndSave(table);
   }
 
