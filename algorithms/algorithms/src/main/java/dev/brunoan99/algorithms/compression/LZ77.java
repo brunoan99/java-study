@@ -1,6 +1,7 @@
 package dev.brunoan99.algorithms.compression;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LZ77 {
@@ -8,6 +9,8 @@ public class LZ77 {
   private static final int DEFAULT_WINDOW_SIZE = 4096;
   private static final int DEFAULT_LOOKAHEAD_BUFFER_SIZE = 16;
   private static final char END_OF_STREAM = '\u0000';
+  private static final char TOKEN_SEPARATOR = '\u241E';
+  private static final char TOKEN_VALUE_SEPARATOR = '\u241F';
 
   private LZ77() {
   }
@@ -20,6 +23,21 @@ public class LZ77 {
       int lengthSize = String.valueOf(length).length();
       int charSize = 1;
       return separatorsSize + commasSize + offsetSize + lengthSize + charSize;
+    }
+
+    Token(String input) {
+      if (!input.contains(String.valueOf(TOKEN_VALUE_SEPARATOR))) {
+        new IllegalArgumentException("String: " + input + "does not contain the separator character");
+      }
+      String[] split = input.split(String.valueOf(TOKEN_VALUE_SEPARATOR));
+      int offset = Integer.valueOf(split[0]);
+      int length = Integer.valueOf(split[1]);
+      char nextChar = split[2].charAt(0);
+      this(offset, length, nextChar);
+    }
+
+    String toStringFormat() {
+      return String.format("%d%c%d%c%s", offset, TOKEN_VALUE_SEPARATOR, length, TOKEN_VALUE_SEPARATOR, nextChar);
     }
   }
 
@@ -111,4 +129,23 @@ public class LZ77 {
     return sb.toString();
   }
 
+  public static String stringifyListOfTokens(List<Token> input) {
+    List<String> list = new ArrayList<>();
+    for (Token token : input) {
+      list.add(token.toStringFormat());
+    }
+    return String.join(String.valueOf(TOKEN_SEPARATOR), list);
+  }
+
+  public static List<Token> listOfTokensFromString(String input) {
+    ArrayList<String> list = new ArrayList<>(Arrays.asList(input.split(String.valueOf(TOKEN_SEPARATOR))));
+
+    List<Token> tokens = new ArrayList<>();
+    for (String tokenString : list) {
+      Token token = new Token(tokenString);
+      tokens.add(token);
+    }
+
+    return tokens;
+  }
 }

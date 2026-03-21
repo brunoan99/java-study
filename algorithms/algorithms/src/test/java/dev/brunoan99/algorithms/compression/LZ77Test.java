@@ -28,6 +28,16 @@ public class LZ77Test {
   }
 
   @Test
+  void testCompressAndDecompressUsingStrings() {
+    String original = "ababcbababaa";
+    List<LZ77.Token> tokens = LZ77.compress(original, 10, 4);
+    String compressed = LZ77.stringifyListOfTokens(tokens);
+    List<LZ77.Token> tokensFromString = LZ77.listOfTokensFromString(compressed);
+    String decompressed = LZ77.decompress(tokensFromString);
+    assertEquals(original, decompressed);
+  }
+
+  @Test
   void testFailWhenGetInvalidWindowSize() {
     assertThrows(IllegalArgumentException.class, () -> LZ77.compress("test", 0, 5));
   }
