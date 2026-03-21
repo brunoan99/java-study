@@ -1,138 +1,144 @@
 package dev.brunoan99.benchmarks.compression;
 
 import dev.brunoan99.algorithms.compression.RLE;
+import dev.brunoan99.utilities.BenchmarkRunner;
+import dev.brunoan99.utilities.RandomInputHelper;
+import dev.brunoan99.utilities.ResultAggregator;
 
-import dev.brunoan99.utilities.Table;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.HashMap;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class RLEBenchmark {
 
   private RLEBenchmark() {
   }
 
-  private record RandomTestConfig(int randomTestsNumber, int randomStringLength, int maxSequenceLength) {
-  }
-
-  private record ProcessingResult(int inputSize, int compressedSize, double compressionRatio, long compressingTime,
+  record ResultLine(
+      int originalSize,
+      int compressedSize,
+      long compressingTime,
       long decompressingTime) {
   }
 
-  private record RandomTestResults(RandomTestConfig config, double meanCompressionRatio, double meanCompressingTime,
-      double meanDecompressingTime) {
+  record ResultFinal(
+      int count,
+      float meanOriginalSize,
+      float meanCompressedSize,
+      float meanCompressingRatio,
+      float meanCompressingTime,
+      float meanDecompressingTime) {
   }
 
-  private static RandomTestResults generateAndProcess(RandomTestConfig config) {
-    String[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split("");
-    List<ProcessingResult> results = new ArrayList<>();
-    for (int i = 0; i < config.randomTestsNumber(); i++) {
-      StringBuilder sb = new StringBuilder();
-      while (sb.length() < config.randomStringLength()) {
-        int remaining = config.randomStringLength() - sb.length();
-        int maxSeq = Math.min(config.maxSequenceLength(), remaining);
-        int seqLen = (int) (Math.random() * maxSeq) + 1;
-        sb.append(characters[(int) (Math.random() * characters.length)].repeat(seqLen));
-      }
-      String input = sb.toString();
+  public static class RLEBenchmarkAccumulator implements ResultAggregator.Accumulator<ResultLine, ResultFinal> {
+    int count = 0;
+    long sumOriginalSize = 0L;
+    long sumCompressedSize = 0L;
+    float sumCompressingRatio = 0L;
+    long sumCompressingTime = 0L;
+    long sumDecompressingTime = 0L;
 
-      long compressingStartTime = System.nanoTime();
-      String compressed = RLE.compress(input);
-      long compressingEndTime = System.nanoTime();
-      long compressingTime = compressingEndTime - compressingStartTime;
-
-      long decompressingStartTime = System.nanoTime();
-      String decompressed = RLE.decompress(compressed);
-      long decompressingEndTime = System.nanoTime();
-      long decompressingTime = decompressingEndTime - decompressingStartTime;
-
-      double compressedRatio = (double) compressed.length() / input.length();
-
-      if (!input.equals(decompressed)) {
-        throw new RuntimeException("Decompressed string does not match original");
-      }
-      results.add(new ProcessingResult(input.length(), compressed.length(), compressedRatio, compressingTime,
-          decompressingTime));
+    @Override
+    public void add(ResultLine v) {
+      count++;
+      sumOriginalSize += v.originalSize;
+      sumCompressedSize += v.compressedSize;
+      sumCompressingRatio += ((float) v.compressedSize / (float) v.originalSize);
+      sumCompressingTime += v.compressingTime;
+      sumDecompressingTime += v.decompressingTime;
     }
-    double meanCompressionRatio = results.stream()
-        .mapToDouble(ProcessingResult::compressionRatio)
-        .average()
-        .orElse(0.0);
-    double meanCompressingTime = results.stream()
-        .mapToLong(ProcessingResult::compressingTime)
-        .average()
-        .orElse(0.0);
-    double meanDecompressingTime = results.stream()
-        .mapToLong(ProcessingResult::decompressingTime)
-        .average()
-        .orElse(0.0);
-    return new RandomTestResults(config, meanCompressionRatio, meanCompressingTime, meanDecompressingTime);
+
+    @Override
+    public ResultFinal result() {
+      return new ResultFinal(
+          count,
+          sumOriginalSize / count,
+          sumCompressedSize / count,
+          sumCompressingRatio / count,
+          sumCompressingTime / count,
+          sumDecompressingTime / count);
+    }
   }
 
-  private static ArrayList<String> process(RandomTestConfig config) {
-    RandomTestResults result = generateAndProcess(config);
-    return new ArrayList<String>(Arrays.asList(
-        String.valueOf(config.randomStringLength()),
-        String.valueOf(config.maxSequenceLength()),
-        String.valueOf(config.randomTestsNumber()),
-        String.format("%.15f", result.meanCompressionRatio()),
-        String.format("%.0f", result.meanCompressingTime()),
-        String.format("%.0f", result.meanDecompressingTime())));
+  private static ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
+    String text = inputLine.value();
+
+    long compressingStartTime = System.nanoTime();
+    String compressed = RLE.compress(text);
+    long compressingEndTime = System.nanoTime();
+    long compressingTime = compressingEndTime - compressingStartTime;
+
+    long decompressingStartTime = System.nanoTime();
+    String decompressed = RLE.decompress(compressed);
+    long decompressingEndTime = System.nanoTime();
+    long decompressingTime = decompressingEndTime - decompressingStartTime;
+
+    if (!text.equals(decompressed)) {
+      throw new RuntimeException("Decompressed string does not match original");
+    }
+
+    return new ResultLine(
+        text.length(),
+        compressed.length(),
+        compressingTime,
+        decompressingTime);
   }
 
-  public static void benchmarkRandomTests() throws Exception {
+  private static ArrayList<ArrayList<String>> formatFunction(HashMap<BenchmarkRunner.InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList("String Length", "Max Sequence Length", "Tests Number",
             "Mean Compression Ratio", "Mean Compressing Time (ns)", "Mean Decompressing Time (ns)")));
+    resMap.entrySet().stream()
+        .sorted(java.util.Comparator
+            .comparingInt(
+                (java.util.Map.Entry<BenchmarkRunner.InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
+            .thenComparingInt(e -> e.getKey().maxSequenceLength()))
+        .forEach(entry -> {
+          BenchmarkRunner.InputParam input = entry.getKey();
+          ResultFinal resfinal = entry.getValue();
+          table.add(new ArrayList<String>(
+              Arrays.asList(
+                  String.valueOf(input.randomStringLength()),
+                  String.valueOf(input.maxSequenceLength()),
+                  String.valueOf(resfinal.count),
+                  String.format("%.10f", resfinal.meanCompressingRatio),
+                  String.format("%,.0f", resfinal.meanCompressingTime),
+                  String.format("%,.0f", resfinal.meanDecompressingTime))));
+        });
+    return table;
+  }
 
-    int randomTestsNumber = 1_000;
+  public static void benchmarkRandomTest(boolean logOnConsole, boolean saveFile)
+      throws Exception {
+    BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
+        64,
+        2_097_152,
+        1,
+        32,
+        1000);
 
-    int minRandomStringLength = 64; // 64B
-    int maxRandomStringLength = 67_108_864; // 64MB
+    long timestamp = System.currentTimeMillis();
+    String folder = "../benchmarks/benchmarks_results/compression/rle/";
+    String path = folder + "rle_compressor_random_tests_results_" + timestamp + ".txt";
 
-    int minMaxSequenceLength = 4; // 4B
-    int maxMaxSequenceLength = 65_536; // 64KB
+    BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
+        benchConfig,
+        logOnConsole,
+        saveFile,
+        path);
+    BenchmarkRunner benchRunner = new BenchmarkRunner(config);
 
-    ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    List<Callable<ArrayList<String>>> tasks = new ArrayList<>();
+    Supplier<ResultAggregator.Accumulator<ResultLine, ResultFinal>> accumulatorFactory = () -> new RLEBenchmarkAccumulator();
+    Function<RandomInputHelper.InputLine, ResultLine> processFunction = inputLine -> processFunction(inputLine);
+    Function<HashMap<BenchmarkRunner.InputParam, ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = resMap -> formatFunction(
+        resMap);
 
-    for (int randomStringLength = minRandomStringLength; randomStringLength <= maxRandomStringLength; randomStringLength *= 2) {
-      for (int maxSequenceLength = minMaxSequenceLength; maxSequenceLength <= maxMaxSequenceLength; maxSequenceLength *= 2) {
-        if (maxSequenceLength < randomStringLength / 262_144) {
-          continue;
-        }
-        if (maxSequenceLength > randomStringLength / 4) {
-          break;
-        }
-        final RandomTestConfig config = new RandomTestConfig(randomTestsNumber, randomStringLength, maxSequenceLength);
-        tasks.add(() -> process(config));
-      }
-    }
-
-    for (Future<ArrayList<String>> future : pool.invokeAll(tasks)) {
-      table.add(future.get());
-    }
-    pool.shutdown();
-
-    String formattedTable = Table.formatTable(table);
-    System.out.println(formattedTable);
-    try {
-      long timestamp = System.currentTimeMillis();
-      String folder = "../benchmarks/rle/benchmarks_results";
-      String filename = folder + "/rle_compressor_random_tests_results_" + timestamp + ".txt";
-      FileWriter writer = new FileWriter(filename);
-      writer.write(formattedTable);
-      writer.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    benchRunner.benchmarkRandomTest(
+        accumulatorFactory,
+        processFunction,
+        formatFunction);
   }
 }
