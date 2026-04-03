@@ -16,16 +16,16 @@ public class ArithmeticCoding {
     if (input == null || input.isEmpty())
       throw new IllegalArgumentException("Input cannot be null or empty");
     this.length = input.length();
-    this.symbolMap = buildSymbolMap(input);
+    this.symbolMap = calculateProbabilitiesMap(input);
   }
 
   public record Range(BigDecimal low, BigDecimal high) {
   }
 
-  public Map<Character, Range> buildSymbolMap(String input) {
+  public Map<Character, Range> calculateProbabilitiesMap(String input) {
     Map<Character, Integer> frequencies = new HashMap<>();
-    for (char symbol : input.toCharArray()) {
-      frequencies.put(symbol, frequencies.getOrDefault(symbol, 0) + 1);
+    for (char character : input.toCharArray()) {
+      frequencies.put(character, frequencies.getOrDefault(character, 0) + 1);
     }
 
     List<Character> sortedKeys = new ArrayList<>(frequencies.keySet());
@@ -35,11 +35,11 @@ public class ArithmeticCoding {
     BigDecimal currentLow = BigDecimal.ZERO;
     int total = input.length();
 
-    for (char symbol : sortedKeys) {
-      BigDecimal probability = BigDecimal.valueOf(frequencies.get(symbol)).divide(BigDecimal.valueOf(total),
+    for (char character : sortedKeys) {
+      BigDecimal characterProbability = BigDecimal.valueOf(frequencies.get(character)).divide(BigDecimal.valueOf(total),
           MathContext.DECIMAL128);
-      BigDecimal high = currentLow.add(probability);
-      probabilities.put(symbol, new Range(currentLow, high));
+      BigDecimal high = currentLow.add(characterProbability);
+      probabilities.put(character, new Range(currentLow, high));
       currentLow = high;
     }
 
