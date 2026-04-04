@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 public class ArithmeticCoding {
-  private final int length;
   private final Map<Character, Range> symbolMap;
+  private final Character EOF = '\0';
 
   public ArithmeticCoding(String input) throws IllegalArgumentException {
     if (input == null || input.isEmpty())
       throw new IllegalArgumentException("Input cannot be null or empty");
-    this.length = input.length();
+    input = new StringBuilder().append(input).append(EOF).toString();
     this.symbolMap = calculateProbabilitiesMap(input);
   }
 
@@ -49,6 +49,7 @@ public class ArithmeticCoding {
   public BigDecimal compress(String input) throws IllegalArgumentException {
     if (input == null || input.isEmpty())
       throw new IllegalArgumentException("Input cannot be null or empty");
+    input = new StringBuilder().append(input).append(EOF).toString();
 
     BigDecimal low = BigDecimal.ZERO;
     BigDecimal high = BigDecimal.ONE;
@@ -76,20 +77,25 @@ public class ArithmeticCoding {
     BigDecimal low = BigDecimal.ZERO;
     BigDecimal high = BigDecimal.ONE;
 
-    for (int i = 0; i < length; i++) {
+    outer: while (true) {
       BigDecimal range = high.subtract(low);
 
-      for (Map.Entry<Character, Range> entry : sortedSymbols) {
+      inner: for (Map.Entry<Character, Range> entry : sortedSymbols) {
         Range symbolRange = entry.getValue();
 
         BigDecimal symbolLow = low.add(range.multiply(symbolRange.low()));
         BigDecimal symbolHigh = low.add(range.multiply(symbolRange.high()));
 
         if (input.compareTo(symbolLow) >= 0 && input.compareTo(symbolHigh) < 0) {
-          sb.append(entry.getKey());
+          Character nextCharacter = entry.getKey();
+          if (nextCharacter == EOF) {
+            break outer;
+          }
+
+          sb.append(nextCharacter);
           low = symbolLow;
           high = symbolHigh;
-          break;
+          break inner;
         }
       }
     }
