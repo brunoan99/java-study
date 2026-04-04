@@ -44,4 +44,54 @@ public class ArithmeticCodingTest {
     assertEquals(input, decompressed);
   }
 
+  @Test
+  void testCompressSequenceOfSameSymbolsShouldReturnCloseToZeroButNotZero() {
+    String fakeInput = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    ArithmeticCoding ac = new ArithmeticCoding(fakeInput);
+    String i1 = "AAAAA"; // 5 A's
+    BigDecimal c1 = ac.compress(i1);
+
+    assertNotNull(c1);
+    assertTrue(c1.compareTo(BigDecimal.ZERO) > 0);
+
+    String d1 = ac.decompress(c1);
+    assertEquals(i1, d1);
+
+    String i2 = "AAAAAAAAAA";
+    BigDecimal c2 = ac.compress(i2);
+    assertNotNull(c2);
+    assertTrue(c2.compareTo(BigDecimal.ZERO) > 0);
+
+    String d2 = ac.decompress(c2);
+    assertEquals(i2, d2);
+
+    // C2 should be greater than C1 cause
+    // the probability distribution of the symbols used is the same for both imputs,
+    // and its a number 0 < x < 1;
+    // in this particular case that the possible range will always be [0, x)
+    // so the longer the input, the more of the possible range is shrinked
+    assertTrue(c2.compareTo(c1) == 1);
+  }
+
+  @Test
+  void testCompressCompressSequenceOfDifferentSymbolsFromConstructor() {
+    // the fake input is used to manipulate the probability distribution of the
+    // symbols, so we can test if the compressed value is greater when we have more
+    // unfrequent symbols on the input
+    String fakeInput = "AAAAAAB";
+    ArithmeticCoding ac = new ArithmeticCoding(fakeInput);
+
+    String i1 = "BBBBBBB"; // 7 B's
+    BigDecimal c1 = ac.compress(i1);
+    assertNotNull(c1);
+
+    String i2 = "BBBBBBBBBB"; // 10 B's
+    BigDecimal c2 = ac.compress(i2);
+    assertNotNull(c2);
+
+    // C2 should be greater than C1 because it has more unfrequent symbols on the
+    // input
+    assertTrue(c2.compareTo(c1) == 1);
+  }
+
 }
