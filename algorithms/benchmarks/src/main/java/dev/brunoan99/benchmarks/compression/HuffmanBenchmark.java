@@ -140,24 +140,8 @@ public class HuffmanBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(boolean logOnConsole, boolean saveFile) throws Exception {
-    BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
-        32,
-        512,
-        1,
-        32,
-        1000);
-
-    long timestamp = System.currentTimeMillis();
-    String folder = "../benchmarks/benchmarks_results/compression/huffman/";
-    String path = folder + "huffman_compressor_random_tests_results_" + timestamp + ".txt";
-
-    BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
-        benchConfig,
-        logOnConsole,
-        saveFile,
-        path);
-
+  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
+      throws Exception {
     BenchmarkRunner benchRunner = new BenchmarkRunner(config);
 
     Supplier<Accumulator<ResultLine, ResultFinal>> accumulatorFactory = HuffmanBenchmarkAccumulator::new;

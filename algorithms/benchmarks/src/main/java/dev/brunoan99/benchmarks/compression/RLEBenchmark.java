@@ -112,24 +112,8 @@ public class RLEBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTest(boolean logOnConsole, boolean saveFile)
+  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
       throws Exception {
-    BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
-        64,
-        2_097_152,
-        1,
-        32,
-        1000);
-
-    long timestamp = System.currentTimeMillis();
-    String folder = "../benchmarks/benchmarks_results/compression/rle/";
-    String path = folder + "rle_compressor_random_tests_results_" + timestamp + ".txt";
-
-    BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
-        benchConfig,
-        logOnConsole,
-        saveFile,
-        path);
     BenchmarkRunner benchRunner = new BenchmarkRunner(config);
 
     Supplier<Accumulator<ResultLine, ResultFinal>> accumulatorFactory = RLEBenchmarkAccumulator::new;

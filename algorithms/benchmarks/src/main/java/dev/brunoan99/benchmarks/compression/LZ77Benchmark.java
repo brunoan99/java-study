@@ -114,24 +114,8 @@ public class LZ77Benchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(boolean logOnConsole, boolean saveFile)
+  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
       throws Exception {
-    BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
-        64,
-        2_097_152,
-        1,
-        32,
-        100);
-
-    long timestamp = System.currentTimeMillis();
-    String folder = "../benchmarks/benchmarks_results/compression/lz77/";
-    String path = folder + "lz77_compressor_random_tests_results_" + timestamp + ".txt";
-
-    BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
-        benchConfig,
-        logOnConsole,
-        saveFile,
-        path);
     BenchmarkRunner benchRunner = new BenchmarkRunner(config);
 
     Supplier<Accumulator<LZ77Benchmark.ResultLine, LZ77Benchmark.ResultFinal>> accumulatorFactory = LZ77BenchmarkAccumulator::new;

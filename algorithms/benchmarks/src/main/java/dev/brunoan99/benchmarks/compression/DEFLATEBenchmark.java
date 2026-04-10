@@ -112,24 +112,8 @@ public class DEFLATEBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(boolean logOnConsole, boolean saveFile)
+  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
       throws Exception {
-    BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
-        64,
-        2_097_152,
-        1,
-        32,
-        10);
-
-    long timestamp = System.currentTimeMillis();
-    String folder = "../benchmarks/benchmarks_results/compression/deflate/";
-    String path = folder + "deflate_compressor_random_tests_results_" + timestamp + ".txt";
-
-    BenchmarkRunner.GeneralConfig config = new BenchmarkRunner.GeneralConfig(
-        benchConfig,
-        logOnConsole,
-        saveFile,
-        path);
     BenchmarkRunner benchRunner = new BenchmarkRunner(config);
 
     Supplier<Accumulator<DEFLATEBenchmark.ResultLine, DEFLATEBenchmark.ResultFinal>> accumulatorFactory = DEFLATEBenchmarkAccumulator::new;
