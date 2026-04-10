@@ -92,7 +92,7 @@ public class BenchmarkRunner {
     ConcurrentHashMap<InputParam, BenchmarkResult> resultAggregator = new ConcurrentHashMap<>();
     ArrayList<InputParam> allParams = new ArrayList<>();
 
-    for (int rsl = config.benchConfig.maxRandomStringLength(); rsl > config.benchConfig
+    for (int rsl = config.benchConfig.maxRandomStringLength(); rsl >= config.benchConfig
         .minRandomStringLength(); rsl /= 2) {
       for (int msl = config.benchConfig.minMaxSequenceLength(); msl <= config.benchConfig
           .maxMaxSequenceLength(); msl *= 2) {
