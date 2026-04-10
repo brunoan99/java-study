@@ -4,6 +4,7 @@ import dev.brunoan99.algorithms.compression.ArithmeticCoding;
 import dev.brunoan99.utilities.Accumulator;
 import dev.brunoan99.utilities.BenchmarkRunner;
 import dev.brunoan99.utilities.RandomInputHelper;
+import dev.brunoan99.utilities.ThroughputCalculator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -87,12 +88,15 @@ public class ArithmeticCodingBenchmark {
     long decompressingTime = decompressingEndTime - decompressingStartTime;
 
     if (!text.equals(decompressed)) {
-      throw new RuntimeException("Decompressed string does not match original");
+      throw new RuntimeException(
+          "Decompressed string does not match original \n" + text + "\n\n != \n\n" + decompressed);
     }
+
+    int compressedSize = compressed.unscaledValue().bitCount() / 8;
 
     return new ResultLine(
         text.length(),
-        compressed.unscaledValue().bitCount() / 8, // Approximation of compressed size in bytes
+        compressedSize, // Approximation of compressed size in bytes
         initializingTime,
         compressingTime,
         decompressingTime);
@@ -101,9 +105,9 @@ public class ArithmeticCodingBenchmark {
   private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
-        Arrays.asList("String Length", "Max Sequence Length", "Tests Number",
-            "Mean Compression Ratio", "Mean Initializing Time (ns)", "Mean Compressing Time (ns)",
-            "Mean Decompressing Time (ns)")));
+        Arrays.asList("Length", "Sequence", "Tests Number",
+            "Compress Ratio", "Init Time", "Compress Time",
+            "Decompress Time", "Compress Throughput", "Decompress Throughput")));
 
     resMap.entrySet().stream()
         .sorted(java.util.Comparator
@@ -121,7 +125,13 @@ public class ArithmeticCodingBenchmark {
                   String.format("%.10f", resfinal.meanCompressingRatio),
                   String.format("%,.0f", resfinal.meanInitializingTime),
                   String.format("%,.0f", resfinal.meanCompressingTime),
-                  String.format("%,.0f", resfinal.meanDecompressingTime))));
+                  String.format("%,.0f", resfinal.meanDecompressingTime),
+                  new ThroughputCalculator(resfinal.meanOriginalSize,
+                      resfinal.meanInitializingTime + resfinal.meanCompressingTime)
+                      .format(),
+                  new ThroughputCalculator(resfinal.meanOriginalSize,
+                      resfinal.meanInitializingTime + resfinal.meanDecompressingTime)
+                      .format())));
         });
     return table;
   }
@@ -130,10 +140,10 @@ public class ArithmeticCodingBenchmark {
       throws Exception {
     BenchmarkRunner.BenchmarkConfig benchConfig = new BenchmarkRunner.BenchmarkConfig(
         64,
-        2_048,
+        512,
         1,
         32,
-        1);
+        1000);
 
     long timestamp = System.currentTimeMillis();
     String folder = "../benchmarks/benchmarks_results/compression/arithmetic_coding/";
