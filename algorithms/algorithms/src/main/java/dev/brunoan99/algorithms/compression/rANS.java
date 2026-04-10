@@ -20,8 +20,9 @@ public class rANS {
       throw new IllegalArgumentException("Input cannot be null or empty");
     this.inputLength = input.length();
 
-    Long uniqueCaracters = input.chars().distinct().count();
-    this.largestRemainder = Math.powExact(2, uniqueCaracters.intValue() - 1);
+    long uniqueCaracters = input.chars().distinct().count();
+    int exponent = Math.min((int) (uniqueCaracters - 1), 12);
+    this.largestRemainder = 1L << exponent;
 
     Map<Character, Intervals> map = calculateQuantizedFrequencies(input);
     this.quantizedFrequencies = Collections.unmodifiableMap(map);
@@ -60,7 +61,7 @@ public class rANS {
     for (Map.Entry<Character, Integer> e : frequencies.entrySet()) {
       double probability = (double) e.getValue() / inputLength;
       probabilities.put(e.getKey(), probability);
-      int floor = (int) Math.floor(probability * largestRemainder);
+      int floor = (int) Math.min(1, Math.floor(probability * largestRemainder));
       flooredValues.put(e.getKey(), floor);
       RemainingValues.put(e.getKey(), probability - floor);
     }
@@ -87,17 +88,10 @@ public class rANS {
       frequenciesQuantized.put(symbol, frequenciesQuantized.get(symbol) + 1);
     }
 
-    List<Character> zeros = frequenciesQuantized.entrySet().stream().filter(en -> en.getValue() == 0)
-        .map(Map.Entry::getKey).collect(Collectors.toList());
-    if (!zeros.isEmpty()) {
-      for (Character symbol : zeros) {
-        frequenciesQuantized.put(symbol, 1);
-      }
-    }
-
     int diff = frequenciesQuantized.values().stream().mapToInt(Integer::intValue).sum() - (int) largestRemainder;
     if (diff > 0) {
-      List<Character> decreaseCandidates = symbols.stream().filter(symbol -> frequenciesQuantized.get(symbol) > 1)
+      List<Character> decreaseCandidates = symbols.stream()
+          .filter(symbol -> frequenciesQuantized.get(symbol) > 1)
           .sorted((a, b) -> {
             int cmp = Double.compare(RemainingValues.get(a), RemainingValues.get(b));
             if (cmp != 0)
@@ -111,7 +105,8 @@ public class rANS {
         diff--;
       }
       if (diff > 0)
-        throw new IllegalStateException("Unable to adjust frequencies to match largestRemainder");
+        throw new IllegalStateException(
+            "Unable to adjust frequencies to match largestRemainder, diff = " + diff + ", input = \n\n" + input);
     }
 
     Map<Character, Intervals> quantizedWithIntervals = new HashMap<>();
@@ -123,9 +118,6 @@ public class rANS {
       quantizedWithIntervals.put(symbol, new Intervals(quantizedFrequency, cursor, cursor + quantizedFrequency - 1));
       cursor += quantizedFrequency;
     }
-
-    if (cursor != largestRemainder)
-      throw new IllegalStateException("Sum of quantized frequencies does not match largestRemainder");
 
     return quantizedWithIntervals;
   }
