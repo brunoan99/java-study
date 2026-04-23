@@ -10,11 +10,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class ArithmeticCodingBenchmark {
-  private ArithmeticCodingBenchmark() {
+public class ArithmeticCodingBenchmark
+    extends BenchmarkRunner<ArithmeticCodingBenchmark.ResultLine, ArithmeticCodingBenchmark.ResultFinal> {
+  public ArithmeticCodingBenchmark() {
+    super(new GeneralConfig());
+  }
+
+  public ArithmeticCodingBenchmark(GeneralConfig config) {
+    super(config);
   }
 
   record ResultLine(
@@ -69,7 +73,8 @@ public class ArithmeticCodingBenchmark {
     }
   }
 
-  private static ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
+  @Override
+  protected ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
     String text = inputLine.value();
 
     long initializingStartTime = System.nanoTime();
@@ -102,7 +107,8 @@ public class ArithmeticCodingBenchmark {
         decompressingTime);
   }
 
-  private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
+  @Override
+  protected ArrayList<ArrayList<String>> formatFunction(Map<InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList("Length", "Sequence", "Tests Number",
@@ -112,10 +118,10 @@ public class ArithmeticCodingBenchmark {
     resMap.entrySet().stream()
         .sorted(java.util.Comparator
             .comparingInt(
-                (java.util.Map.Entry<BenchmarkRunner.InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
+                (java.util.Map.Entry<InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
             .thenComparingInt(e -> e.getKey().maxSequenceLength()))
         .forEach(entry -> {
-          BenchmarkRunner.InputParam input = entry.getKey();
+          InputParam input = entry.getKey();
           ResultFinal resfinal = entry.getValue();
           table.add(new ArrayList<String>(
               Arrays.asList(
@@ -136,17 +142,8 @@ public class ArithmeticCodingBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
-      throws Exception {
-    BenchmarkRunner benchRunner = new BenchmarkRunner(config);
-
-    Supplier<Accumulator<ArithmeticCodingBenchmark.ResultLine, ArithmeticCodingBenchmark.ResultFinal>> accumulatorFactory = ArithmeticCodingBenchmarkAccumulator::new;
-    Function<RandomInputHelper.InputLine, ArithmeticCodingBenchmark.ResultLine> processFunction = ArithmeticCodingBenchmark::processFunction;
-    Function<Map<BenchmarkRunner.InputParam, ArithmeticCodingBenchmark.ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = ArithmeticCodingBenchmark::formatFunction;
-
-    benchRunner.benchmarkRandomTest(
-        accumulatorFactory,
-        processFunction,
-        formatFunction);
+  @Override
+  protected Accumulator<ResultLine, ResultFinal> accumulatorFactory() {
+    return new ArithmeticCodingBenchmarkAccumulator();
   }
 }

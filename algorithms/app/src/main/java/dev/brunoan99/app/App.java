@@ -20,21 +20,10 @@ public class App {
         true,
         path);
 
-    // long arithmeticCodingStartTime = System.nanoTime();
-    // ArithmeticCodingBenchmark.benchmarkRandomTests(config);
-    // long arithmeticCodingEndTime = System.nanoTime();
-    // long arithmeticCodingTime = arithmeticCodingEndTime -
-    // arithmeticCodingStartTime;
-    // IO.println("Arithmetic Coding Timing: " + arithmeticCodingTime);
-
-    // long ransStartTime = System.nanoTime();
-    // rANSBenchmark.benchmarkRandomTests(config);
-    // long ransEndTime = System.nanoTime();
-    // long ransTime = ransEndTime - ransStartTime;
-    // IO.println("rANS Timing: " + ransTime);
-
     long multipleStartTime = System.nanoTime();
-    rANSArithmeticHuffmanBenchmark.benchmarkRandomTests(config);
+    rANSArithmeticHuffmanBenchmark ransArithmeticHuffmanBenchmark = new rANSArithmeticHuffmanBenchmark(config);
+    ransArithmeticHuffmanBenchmark.benchmarkRandomTest();
+
     long multipleEndTime = System.nanoTime();
     long multipleTime = multipleEndTime - multipleStartTime;
     IO.println("rANS + Arithmetic Coding + Huffman Timing: " + multipleTime);

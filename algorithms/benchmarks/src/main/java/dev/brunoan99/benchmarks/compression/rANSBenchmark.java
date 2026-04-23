@@ -10,11 +10,14 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class rANSBenchmark {
-  private rANSBenchmark() {
+public class rANSBenchmark extends BenchmarkRunner<rANSBenchmark.ResultLine, rANSBenchmark.ResultFinal> {
+  public rANSBenchmark() {
+    super(new GeneralConfig());
+  }
+
+  public rANSBenchmark(GeneralConfig config) {
+    super(config);
   }
 
   record ResultLine(
@@ -69,7 +72,8 @@ public class rANSBenchmark {
     }
   }
 
-  private static ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
+  @Override
+  protected ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
     String text = inputLine.value();
 
     long initializingStartTime = System.nanoTime();
@@ -99,7 +103,8 @@ public class rANSBenchmark {
         decompressingTime);
   }
 
-  private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
+  @Override
+  protected ArrayList<ArrayList<String>> formatFunction(Map<InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList("Length", "Sequence", "Tests Number",
@@ -109,10 +114,10 @@ public class rANSBenchmark {
     resMap.entrySet().stream()
         .sorted(java.util.Comparator
             .comparingInt(
-                (java.util.Map.Entry<BenchmarkRunner.InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
+                (java.util.Map.Entry<InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
             .thenComparingInt(e -> e.getKey().maxSequenceLength()))
         .forEach(entry -> {
-          BenchmarkRunner.InputParam input = entry.getKey();
+          InputParam input = entry.getKey();
           ResultFinal resfinal = entry.getValue();
           table.add(new ArrayList<String>(
               Arrays.asList(
@@ -133,18 +138,9 @@ public class rANSBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
-      throws Exception {
-    BenchmarkRunner benchRunner = new BenchmarkRunner(config);
-
-    Supplier<Accumulator<rANSBenchmark.ResultLine, rANSBenchmark.ResultFinal>> accumulatorFactory = rANSBenchmarkAccumulator::new;
-    Function<RandomInputHelper.InputLine, rANSBenchmark.ResultLine> processFunction = rANSBenchmark::processFunction;
-    Function<Map<BenchmarkRunner.InputParam, rANSBenchmark.ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = rANSBenchmark::formatFunction;
-
-    benchRunner.benchmarkRandomTest(
-        accumulatorFactory,
-        processFunction,
-        formatFunction);
+  @Override
+  protected Accumulator<ResultLine, ResultFinal> accumulatorFactory() {
+    return new rANSBenchmarkAccumulator();
   }
 
 }

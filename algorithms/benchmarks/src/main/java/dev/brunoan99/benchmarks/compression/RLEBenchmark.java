@@ -8,12 +8,14 @@ import dev.brunoan99.utilities.RandomInputHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class RLEBenchmark {
+public class RLEBenchmark extends BenchmarkRunner<RLEBenchmark.ResultLine, RLEBenchmark.ResultFinal> {
+  public RLEBenchmark() {
+    super(new GeneralConfig());
+  }
 
-  private RLEBenchmark() {
+  public RLEBenchmark(GeneralConfig config) {
+    super(config);
   }
 
   record ResultLine(
@@ -63,7 +65,13 @@ public class RLEBenchmark {
     }
   }
 
-  private static ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
+  @Override
+  protected Accumulator<ResultLine, ResultFinal> accumulatorFactory() {
+    return new RLEBenchmarkAccumulator();
+  }
+
+  @Override
+  protected ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
     String text = inputLine.value();
 
     long compressingStartTime = System.nanoTime();
@@ -87,7 +95,8 @@ public class RLEBenchmark {
         decompressingTime);
   }
 
-  private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
+  @Override
+  protected ArrayList<ArrayList<String>> formatFunction(Map<InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList("String Length", "Max Sequence Length", "Tests Number",
@@ -95,10 +104,10 @@ public class RLEBenchmark {
     resMap.entrySet().stream()
         .sorted(java.util.Comparator
             .comparingInt(
-                (java.util.Map.Entry<BenchmarkRunner.InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
+                (java.util.Map.Entry<InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
             .thenComparingInt(e -> e.getKey().maxSequenceLength()))
         .forEach(entry -> {
-          BenchmarkRunner.InputParam input = entry.getKey();
+          InputParam input = entry.getKey();
           ResultFinal resfinal = entry.getValue();
           table.add(new ArrayList<String>(
               Arrays.asList(
@@ -110,19 +119,5 @@ public class RLEBenchmark {
                   String.format("%,.0f", resfinal.meanDecompressingTime))));
         });
     return table;
-  }
-
-  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
-      throws Exception {
-    BenchmarkRunner benchRunner = new BenchmarkRunner(config);
-
-    Supplier<Accumulator<ResultLine, ResultFinal>> accumulatorFactory = RLEBenchmarkAccumulator::new;
-    Function<RandomInputHelper.InputLine, ResultLine> processFunction = RLEBenchmark::processFunction;
-    Function<Map<BenchmarkRunner.InputParam, ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = RLEBenchmark::formatFunction;
-
-    benchRunner.benchmarkRandomTest(
-        accumulatorFactory,
-        processFunction,
-        formatFunction);
   }
 }

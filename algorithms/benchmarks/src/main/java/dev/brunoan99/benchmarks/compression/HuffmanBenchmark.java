@@ -8,11 +8,14 @@ import dev.brunoan99.utilities.RandomInputHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class HuffmanBenchmark {
-  private HuffmanBenchmark() {
+public class HuffmanBenchmark extends BenchmarkRunner<HuffmanBenchmark.ResultLine, HuffmanBenchmark.ResultFinal> {
+  public HuffmanBenchmark() {
+    super(new GeneralConfig());
+  }
+
+  public HuffmanBenchmark(GeneralConfig config) {
+    super(config);
   }
 
   record ResultLine(
@@ -67,7 +70,8 @@ public class HuffmanBenchmark {
     }
   }
 
-  private static ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
+  @Override
+  protected ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
     try {
 
       String text = inputLine.value();
@@ -108,7 +112,8 @@ public class HuffmanBenchmark {
     }
   }
 
-  private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
+  @Override
+  protected ArrayList<ArrayList<String>> formatFunction(Map<InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList(
@@ -122,10 +127,10 @@ public class HuffmanBenchmark {
     resMap.entrySet().stream()
         .sorted(java.util.Comparator
             .comparingInt(
-                (java.util.Map.Entry<BenchmarkRunner.InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
+                (java.util.Map.Entry<InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
             .thenComparingInt(e -> e.getKey().maxSequenceLength()))
         .forEach(entry -> {
-          BenchmarkRunner.InputParam input = entry.getKey();
+          InputParam input = entry.getKey();
           ResultFinal resfinal = entry.getValue();
           table.add(new ArrayList<String>(
               Arrays.asList(
@@ -140,17 +145,8 @@ public class HuffmanBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
-      throws Exception {
-    BenchmarkRunner benchRunner = new BenchmarkRunner(config);
-
-    Supplier<Accumulator<ResultLine, ResultFinal>> accumulatorFactory = HuffmanBenchmarkAccumulator::new;
-    Function<RandomInputHelper.InputLine, ResultLine> processFunction = HuffmanBenchmark::processFunction;
-    Function<Map<BenchmarkRunner.InputParam, ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = HuffmanBenchmark::formatFunction;
-
-    benchRunner.benchmarkRandomTest(
-        accumulatorFactory,
-        processFunction,
-        formatFunction);
+  @Override
+  protected Accumulator<ResultLine, ResultFinal> accumulatorFactory() {
+    return new HuffmanBenchmarkAccumulator();
   }
 }

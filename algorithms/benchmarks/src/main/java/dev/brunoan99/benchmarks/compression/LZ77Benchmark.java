@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class LZ77Benchmark {
-  private LZ77Benchmark() {
+public class LZ77Benchmark extends BenchmarkRunner<LZ77Benchmark.ResultLine, LZ77Benchmark.ResultFinal> {
+  public LZ77Benchmark() {
+    super(new GeneralConfig());
+  }
+
+  public LZ77Benchmark(GeneralConfig config) {
+    super(config);
   }
 
   record ResultLine(
@@ -63,7 +66,8 @@ public class LZ77Benchmark {
     }
   }
 
-  private static ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
+  @Override
+  protected ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
     String text = inputLine.value();
 
     long compressingStartTime = System.nanoTime();
@@ -89,7 +93,8 @@ public class LZ77Benchmark {
         decompressingTime);
   }
 
-  private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
+  @Override
+  protected ArrayList<ArrayList<String>> formatFunction(Map<InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList("String Length", "Max Sequence Length", "Tests Number",
@@ -97,10 +102,10 @@ public class LZ77Benchmark {
     resMap.entrySet().stream()
         .sorted(java.util.Comparator
             .comparingInt(
-                (java.util.Map.Entry<BenchmarkRunner.InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
+                (java.util.Map.Entry<InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
             .thenComparingInt(e -> e.getKey().maxSequenceLength()))
         .forEach(entry -> {
-          BenchmarkRunner.InputParam input = entry.getKey();
+          InputParam input = entry.getKey();
           ResultFinal resfinal = entry.getValue();
           table.add(new ArrayList<String>(
               Arrays.asList(
@@ -114,18 +119,9 @@ public class LZ77Benchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
-      throws Exception {
-    BenchmarkRunner benchRunner = new BenchmarkRunner(config);
-
-    Supplier<Accumulator<LZ77Benchmark.ResultLine, LZ77Benchmark.ResultFinal>> accumulatorFactory = LZ77BenchmarkAccumulator::new;
-    Function<RandomInputHelper.InputLine, LZ77Benchmark.ResultLine> processFunction = LZ77Benchmark::processFunction;
-    Function<Map<BenchmarkRunner.InputParam, LZ77Benchmark.ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = LZ77Benchmark::formatFunction;
-
-    benchRunner.benchmarkRandomTest(
-        accumulatorFactory,
-        processFunction,
-        formatFunction);
+  @Override
+  protected Accumulator<ResultLine, ResultFinal> accumulatorFactory() {
+    return new LZ77BenchmarkAccumulator();
   }
 
 }

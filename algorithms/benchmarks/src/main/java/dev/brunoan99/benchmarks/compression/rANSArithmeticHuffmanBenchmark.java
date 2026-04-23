@@ -12,11 +12,15 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class rANSArithmeticHuffmanBenchmark {
-  private rANSArithmeticHuffmanBenchmark() {
+public class rANSArithmeticHuffmanBenchmark
+    extends BenchmarkRunner<rANSArithmeticHuffmanBenchmark.ResultLine, rANSArithmeticHuffmanBenchmark.ResultFinal> {
+  public rANSArithmeticHuffmanBenchmark() {
+    super(new GeneralConfig());
+  }
+
+  public rANSArithmeticHuffmanBenchmark(GeneralConfig config) {
+    super(config);
   }
 
   record ResultLine(
@@ -133,7 +137,8 @@ public class rANSArithmeticHuffmanBenchmark {
     }
   }
 
-  public static ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
+  @Override
+  protected ResultLine processFunction(RandomInputHelper.InputLine inputLine) {
     String text = inputLine.value();
 
     long ArithmeticCodingInitializingStartTime = System.nanoTime();
@@ -223,7 +228,8 @@ public class rANSArithmeticHuffmanBenchmark {
         rANSDecompressingTime);
   }
 
-  private static ArrayList<ArrayList<String>> formatFunction(Map<BenchmarkRunner.InputParam, ResultFinal> resMap) {
+  @Override
+  protected ArrayList<ArrayList<String>> formatFunction(Map<InputParam, ResultFinal> resMap) {
     ArrayList<ArrayList<String>> table = new ArrayList<ArrayList<String>>();
     table.add(new ArrayList<String>(
         Arrays.asList(
@@ -239,10 +245,10 @@ public class rANSArithmeticHuffmanBenchmark {
     resMap.entrySet().stream()
         .sorted(java.util.Comparator
             .comparingInt(
-                (java.util.Map.Entry<BenchmarkRunner.InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
+                (java.util.Map.Entry<InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
             .thenComparingInt(e -> e.getKey().maxSequenceLength()))
         .forEach(entry -> {
-          BenchmarkRunner.InputParam input = entry.getKey();
+          InputParam input = entry.getKey();
           ResultFinal resfinal = entry.getValue();
           table.add(new ArrayList<String>(
               Arrays.asList(
@@ -267,17 +273,8 @@ public class rANSArithmeticHuffmanBenchmark {
     return table;
   }
 
-  public static void benchmarkRandomTests(BenchmarkRunner.GeneralConfig config)
-      throws Exception {
-    BenchmarkRunner benchRunner = new BenchmarkRunner(config);
-
-    Supplier<Accumulator<rANSArithmeticHuffmanBenchmark.ResultLine, rANSArithmeticHuffmanBenchmark.ResultFinal>> accumulatorFactory = rANSArithmeticHuffmanBenchmarkAccumulator::new;
-    Function<RandomInputHelper.InputLine, rANSArithmeticHuffmanBenchmark.ResultLine> processFunction = rANSArithmeticHuffmanBenchmark::processFunction;
-    Function<Map<BenchmarkRunner.InputParam, rANSArithmeticHuffmanBenchmark.ResultFinal>, ArrayList<ArrayList<String>>> formatFunction = rANSArithmeticHuffmanBenchmark::formatFunction;
-
-    benchRunner.benchmarkRandomTest(
-        accumulatorFactory,
-        processFunction,
-        formatFunction);
+  @Override
+  protected Accumulator<ResultLine, ResultFinal> accumulatorFactory() {
+    return new rANSArithmeticHuffmanBenchmarkAccumulator();
   }
 }
