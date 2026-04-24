@@ -1,0 +1,2 @@
+| Length | Sequence | Charset | Tests Number | rANS Compression Ratio | rANS TotalTime | A.C. Compression Ratio | A.C. TotalTime | Huf. Compression Ratio | Huf. TotalTime |
+| ------ | -------- | ------- | ------------ | ---------------------- | -------------- | ---------------------- | -------------- | ---------------------- | -------------- |

@@ -2,14 +2,6 @@ plugins {
     id 'buildlogic.java-library-conventions'
 }
 
-tasks.named('jar') {
-    enabled = false
-}
-
-tasks.matching { it.name == 'sourcesJar' }.configureEach {
-    enabled = false
-}
-
 dependencies {
     implementation project(':algorithms')
     implementation project(':utilities')

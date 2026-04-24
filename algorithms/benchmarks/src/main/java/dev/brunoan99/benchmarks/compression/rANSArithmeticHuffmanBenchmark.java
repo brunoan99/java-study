@@ -4,7 +4,7 @@ import dev.brunoan99.algorithms.compression.ArithmeticCoding;
 import dev.brunoan99.algorithms.compression.Huffman;
 import dev.brunoan99.algorithms.compression.rANS;
 import dev.brunoan99.utilities.Accumulator;
-import dev.brunoan99.utilities.BenchmarkRunner;
+import dev.brunoan99.utilities.BenchmarkCharsetRunner;
 import dev.brunoan99.utilities.RandomInputHelper;
 
 import java.math.BigDecimal;
@@ -14,7 +14,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class rANSArithmeticHuffmanBenchmark
-    extends BenchmarkRunner<rANSArithmeticHuffmanBenchmark.ResultLine, rANSArithmeticHuffmanBenchmark.ResultFinal> {
+    extends
+    BenchmarkCharsetRunner<rANSArithmeticHuffmanBenchmark.ResultLine, rANSArithmeticHuffmanBenchmark.ResultFinal> {
   public rANSArithmeticHuffmanBenchmark() {
     super(new GeneralConfig());
   }
@@ -235,6 +236,7 @@ public class rANSArithmeticHuffmanBenchmark
         Arrays.asList(
             "Length",
             "Sequence",
+            "Charset",
             "Tests Number",
             "rANS Compression Ratio",
             "rANS TotalTime",
@@ -246,7 +248,7 @@ public class rANSArithmeticHuffmanBenchmark
         .sorted(java.util.Comparator
             .comparingInt(
                 (java.util.Map.Entry<InputParam, ResultFinal> e) -> e.getKey().randomStringLength())
-            .thenComparingInt(e -> e.getKey().maxSequenceLength()))
+            .thenComparingInt(e -> e.getKey().maxSequenceLength()).thenComparing(e -> e.getKey().charsetLength()))
         .forEach(entry -> {
           InputParam input = entry.getKey();
           ResultFinal resfinal = entry.getValue();
@@ -254,6 +256,7 @@ public class rANSArithmeticHuffmanBenchmark
               Arrays.asList(
                   String.valueOf(input.randomStringLength()),
                   String.valueOf(input.maxSequenceLength()),
+                  String.valueOf(input.charsetLength()),
                   String.valueOf(resfinal.count),
 
                   String.format("%.10f", resfinal.meanrANSCompressingRatio),
